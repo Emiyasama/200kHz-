@@ -91,7 +91,7 @@ void TIM2_NVIC_Init (void){ //开启TIM3中断向量
 }
 
 u16 t;
-u8 Capture_State;
+u8 Capture_State=1;
 void TIM3_IRQHandler(void){ //TIM3中断处理函数
     if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET){	//判断是否是TIM3中断
         TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
@@ -109,9 +109,11 @@ void TIM2_IRQHandler(void){
 		{
 				time_us=TIM_GetCounter (TIM3);
 				times=t*100+time_us;//times单位为us
+			  Capture_State=1;  //为1后停止计时
 		}
-		else{
-				Capture_State=1;//为0时才开始计时
+		if(GPIO_ReadInputDataBit(getPORT,getPin)==0){
+				Capture_State=0;   //接收端电压为0了
 		}
+
 }
 

@@ -37,15 +37,15 @@ int main (void){//主程序
 	USART3_printf(" init over\r\n");
 	
 	while(1){
-		
+			//初始化的Capture_State为1，当中断里读到引脚为0时才会开始发射
+			TIM_Cmd(TIM2,ENABLE); //使能TIM2，中断里判断引脚是否为0
 			while(Capture_State==1){  //等待接收端变回0才开始准备下一次发射
 					//USART3_printf("waiting for 0\r\n");
 			}
 		
 			USART3_printf("Capture_State = %d,start timing!\r\n",Capture_State);
       //AD9850_2_Write_Serial(0,200000);  //发射200k
-			TIM_Cmd(TIM3,ENABLE); //使能TIM2
-			TIM_Cmd(TIM2,ENABLE); //使能TIM2
+			TIM_Cmd(TIM3,ENABLE); //使能TIM3
 			t=0;//重装载值清零，指经过了多少个周期
 			
 		  //接收部分
